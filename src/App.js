@@ -33,259 +33,241 @@ const uploadFileToBlobStorage = async (file) => {
   }
 };
 
-// HTML Template Generator
+// HTML Template Generator - Updated for email compatibility
 const generateEmailHtml = (templateData) => {
-  return `<!DOCTYPE html>
-<html lang="en">
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${templateData.headline1} ${templateData.headline2}</title>
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-      color: #333;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 0;
-    }
-    .header {
-      text-align: center;
-      padding: 20px;
-    }
-    .section {
-      margin-bottom: 30px;
-    }
-    .text-center {
-      text-align: center;
-    }
-    .btn {
-      background-color: #3182ce;
-      color: white;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-weight: bold;
-      display: inline-block;
-      margin: 10px 0;
-    }
-    .text-blue {
-      color: #3182ce;
-    }
-    .benefits-grid {
-      display: table;
-      width: 100%;
-      table-layout: fixed;
-      margin: 20px 0;
-    }
-    .benefit-cell {
-      display: table-cell;
-      text-align: center;
-      padding: 10px;
-      width: 25%;
-    }
-    .benefit-icon {
-      width: 50px;
-      height: 50px;
-      background-color: #e6f0ff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 10px;
-      color: #3182ce;
-    }
-    .services-grid {
-      display: table;
-      width: 100%;
-      table-layout: fixed;
-      margin: 20px 0;
-    }
-    .service-cell {
-      display: table-cell;
-      text-align: center;
-      padding: 10px;
-      width: 50%;
-    }
-    .service-img {
-      width: 100%;
-      max-width: 250px;
-      height: auto;
-      margin-bottom: 10px;
-    }
-    .social-container {
-      display: table;
-      width: 100%;
-      table-layout: fixed;
-      margin: 20px 0;
-    }
-    .social-icon {
-      display: table-cell;
-      text-align: center;
-    }
-    .social-circle {
-      width: 24px;
-      height: 24px;
-      background-color: #e2e8f0;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .headline {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 5px 0;
-    }
-    .subheadline {
-      font-size: 16px;
-      margin: 10px 0;
-    }
-    .impact-text {
-      font-size: 24px;
-      font-weight: bold;
-      margin: 5px 0;
-    }
-    img {
-      max-width: 100%;
-    }
-    .image-placeholder {
-      background-color: #e2e8f0;
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #718096;
-      font-size: 14px;
-    }
-    .service-placeholder {
-      background-color: #e2e8f0;
-      height: 160px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #718096;
-      font-size: 14px;
-    }
-    @media only screen and (max-width: 480px) {
-      .benefits-grid, .services-grid {
-        display: block;
-      }
-      .benefit-cell, .service-cell {
-        display: block;
-        width: 100%;
-        margin-bottom: 20px;
-      }
-    }
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td {font-family: Arial, Helvetica, sans-serif !important;}
   </style>
+  <![endif]-->
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1 class="headline">
-        <span>${templateData.headline1}</span> <span class="text-blue">BRAND</span>
-      </h1>
-      <h1 class="headline">${templateData.headline2}</h1>
-      <p class="subheadline">${templateData.subheadline}</p>
-      
-      <a href="#" class="btn">
-        ${templateData.ctaButton}
-      </a>
-    </div>
-    
-    <div class="section">
-      ${templateData.headerImage ? 
-        `<img src="${templateData.headerImage}" alt="Header Image" style="width: 100%; height: auto;">` : 
-        `<div class="image-placeholder">
-          <p>Image Placeholder</p>
-        </div>`
-      }
-    </div>
-    
-    <div class="section text-center">
-      <h2>${templateData.whatWeDo}</h2>
-      <p>${templateData.description}</p>
-    </div>
-    
-    <div class="section">
-      <div class="benefits-grid">
-        <div class="benefit-cell">
-          <div class="benefit-icon">icon</div>
-          <p style="font-weight: bold; font-size: 12px;">${templateData.benefit1}</p>
-        </div>
-        <div class="benefit-cell">
-          <div class="benefit-icon">icon</div>
-          <p style="font-weight: bold; font-size: 12px;">${templateData.benefit2}</p>
-        </div>
-        <div class="benefit-cell">
-          <div class="benefit-icon">icon</div>
-          <p style="font-weight: bold; font-size: 12px;">${templateData.benefit3}</p>
-        </div>
-        <div class="benefit-cell">
-          <div class="benefit-icon">icon</div>
-          <p style="font-weight: bold; font-size: 12px;">${templateData.benefit4}</p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="section text-center">
-      <h2 class="impact-text">${templateData.impactHeadline1}</h2>
-      <h2 class="impact-text">${templateData.impactHeadline2}</h2>
-      <p class="impact-text text-blue">${templateData.impactHighlight}</p>
-    </div>
-    
-    <div class="section">
-      <div class="services-grid">
-        <div class="service-cell">
-          ${templateData.service1Image ? 
-            `<img src="${templateData.service1Image}" alt="Service 1" class="service-img">` : 
-            `<div class="service-placeholder">
-              <p>Image Placeholder</p>
-            </div>`
-          }
-          <p>${templateData.service1}</p>
-        </div>
-        <div class="service-cell">
-          ${templateData.service2Image ? 
-            `<img src="${templateData.service2Image}" alt="Service 2" class="service-img">` : 
-            `<div class="service-placeholder">
-              <p>Image Placeholder</p>
-            </div>`
-          }
-          <p>${templateData.service2}</p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="section text-center">
-      <h2 class="impact-text">${templateData.closingCta1}</h2>
-      <h2 class="headline">
-        <span>CGI</span> <span class="text-blue">AD</span>
-      </h2>
-      
-      <a href="#" class="btn">
-        ${templateData.contactButton}
-      </a>
-      
-      <p style="margin-top: 20px;">
-        ${templateData.contactText}
-        <br>
-        <a href="mailto:${templateData.emailAddress}" class="text-blue" style="text-decoration: none;">
-          ${templateData.emailAddress}
-        </a>
-      </p>
-      
-      <div class="social-container">
-        <div class="social-icon"><div class="social-circle"></div></div>
-        <div class="social-icon"><div class="social-circle"></div></div>
-        <div class="social-icon"><div class="social-circle"></div></div>
-        <div class="social-icon"><div class="social-circle"></div></div>
-      </div>
-    </div>
-  </div>
+<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #333; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+  <table role="presentation" cellpadding="0" cellspacing="0" style="border: 0; width: 100%;">
+    <tr>
+      <td style="padding: 0;">
+        <table align="center" role="presentation" cellpadding="0" cellspacing="0" style="border: 0; max-width: 600px; width: 100%;">
+          <!-- Header Section -->
+          <tr>
+            <td align="center" style="padding: 20px;">
+              <h1 style="font-size: 28px; font-weight: bold; margin: 5px 0;">
+                <span>${templateData.headline1}</span> <span style="color: #3182ce;">BRAND</span>
+              </h1>
+              <h1 style="font-size: 28px; font-weight: bold; margin: 5px 0;">${templateData.headline2}</h1>
+              <p style="font-size: 16px; margin: 10px 0;">${templateData.subheadline}</p>
+              
+              <div>
+                <!--[if mso]>
+                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${templateData.ctaButtonLink || '#'}" style="height:40px;v-text-anchor:middle;width:150px;" arcsize="50%" stroke="f" fillcolor="#3182ce">
+                  <w:anchorlock/>
+                  <center>
+                <![endif]-->
+                <a href="${templateData.ctaButtonLink || '#'}" style="background-color: #3182ce; border-radius: 30px; color: white; display: inline-block; font-family: sans-serif; font-size: 16px; font-weight: bold; line-height: 40px; text-align: center; text-decoration: none; width: 150px; -webkit-text-size-adjust: none;">${templateData.ctaButton}</a>
+                <!--[if mso]>
+                  </center>
+                </v:roundrect>
+                <![endif]-->
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Header Image -->
+          <tr>
+            <td style="padding: 0;">
+              ${templateData.headerImage ? 
+                `<img src="${templateData.headerImage}" alt="Header Image" style="width: 100%; height: auto; border: 0; display: block;" />` : 
+                `<div style="background-color: #e2e8f0; height: 200px; display: block; text-align: center;">
+                  <p style="margin: 0; padding-top: 90px; color: #718096; font-size: 14px;">Image Placeholder</p>
+                </div>`
+              }
+            </td>
+          </tr>
+          
+          <!-- What We Do Section -->
+          <tr>
+            <td align="center" style="padding: 20px;">
+              <h2 style="margin: 10px 0;">${templateData.whatWeDo}</h2>
+              <p style="margin: 10px 0;">${templateData.description}</p>
+            </td>
+          </tr>
+          
+          <!-- Benefits Section -->
+          <tr>
+            <td style="padding: 0 20px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%;">
+                <tr>
+                  <!-- Benefit 1 -->
+                  <td align="center" style="padding: 10px; width: 25%; vertical-align: top;">
+                    <div style="margin-bottom: 10px;">
+                      ${templateData.benefit1Icon ? 
+                        `<img src="${templateData.benefit1Icon}" alt="Benefit 1 icon" style="width: 50px; height: 50px; border: 0; display: block; margin: 0 auto;" />` : 
+                        `<div style="width: 50px; height: 50px; background-color: #e6f0ff; border-radius: 50%; color: #3182ce; text-align: center; line-height: 50px; margin: 0 auto;">icon</div>`
+                      }
+                    </div>
+                    <p style="font-weight: bold; font-size: 12px; margin: 5px 0;">${templateData.benefit1}</p>
+                  </td>
+                  
+                  <!-- Benefit 2 -->
+                  <td align="center" style="padding: 10px; width: 25%; vertical-align: top;">
+                    <div style="margin-bottom: 10px;">
+                      ${templateData.benefit2Icon ? 
+                        `<img src="${templateData.benefit2Icon}" alt="Benefit 2 icon" style="width: 50px; height: 50px; border: 0; display: block; margin: 0 auto;" />` : 
+                        `<div style="width: 50px; height: 50px; background-color: #e6f0ff; border-radius: 50%; color: #3182ce; text-align: center; line-height: 50px; margin: 0 auto;">icon</div>`
+                      }
+                    </div>
+                    <p style="font-weight: bold; font-size: 12px; margin: 5px 0;">${templateData.benefit2}</p>
+                  </td>
+                  
+                  <!-- Benefit 3 -->
+                  <td align="center" style="padding: 10px; width: 25%; vertical-align: top;">
+                    <div style="margin-bottom: 10px;">
+                      ${templateData.benefit3Icon ? 
+                        `<img src="${templateData.benefit3Icon}" alt="Benefit 3 icon" style="width: 50px; height: 50px; border: 0; display: block; margin: 0 auto;" />` : 
+                        `<div style="width: 50px; height: 50px; background-color: #e6f0ff; border-radius: 50%; color: #3182ce; text-align: center; line-height: 50px; margin: 0 auto;">icon</div>`
+                      }
+                    </div>
+                    <p style="font-weight: bold; font-size: 12px; margin: 5px 0;">${templateData.benefit3}</p>
+                  </td>
+                  
+                  <!-- Benefit 4 -->
+                  <td align="center" style="padding: 10px; width: 25%; vertical-align: top;">
+                    <div style="margin-bottom: 10px;">
+                      ${templateData.benefit4Icon ? 
+                        `<img src="${templateData.benefit4Icon}" alt="Benefit 4 icon" style="width: 50px; height: 50px; border: 0; display: block; margin: 0 auto;" />` : 
+                        `<div style="width: 50px; height: 50px; background-color: #e6f0ff; border-radius: 50%; color: #3182ce; text-align: center; line-height: 50px; margin: 0 auto;">icon</div>`
+                      }
+                    </div>
+                    <p style="font-weight: bold; font-size: 12px; margin: 5px 0;">${templateData.benefit4}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Impact Section -->
+          <tr>
+            <td align="center" style="padding: 20px;">
+              <h2 style="font-size: 24px; font-weight: bold; margin: 5px 0;">${templateData.impactHeadline1}</h2>
+              <h2 style="font-size: 24px; font-weight: bold; margin: 5px 0;">${templateData.impactHeadline2}</h2>
+              <p style="font-size: 24px; font-weight: bold; margin: 5px 0; color: #3182ce;">${templateData.impactHighlight}</p>
+            </td>
+          </tr>
+          
+          <!-- Services Section -->
+          <tr>
+            <td style="padding: 0 20px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%;">
+                <tr>
+                  <!-- Service 1 -->
+                  <td align="center" style="padding: 10px; width: 50%; vertical-align: top;">
+                    ${templateData.service1Image ? 
+                      `<img src="${templateData.service1Image}" alt="Service 1" style="width: 100%; max-width: 250px; height: auto; border: 0; display: block; margin: 0 auto 10px;" />` : 
+                      `<div style="background-color: #e2e8f0; height: 160px; text-align: center; margin-bottom: 10px;">
+                        <p style="margin: 0; padding-top: 70px; color: #718096; font-size: 14px;">Image Placeholder</p>
+                      </div>`
+                    }
+                    <p style="margin: 10px 0;">${templateData.service1}</p>
+                  </td>
+                  
+                  <!-- Service 2 -->
+                  <td align="center" style="padding: 10px; width: 50%; vertical-align: top;">
+                    ${templateData.service2Image ? 
+                      `<img src="${templateData.service2Image}" alt="Service 2" style="width: 100%; max-width: 250px; height: auto; border: 0; display: block; margin: 0 auto 10px;" />` : 
+                      `<div style="background-color: #e2e8f0; height: 160px; text-align: center; margin-bottom: 10px;">
+                        <p style="margin: 0; padding-top: 70px; color: #718096; font-size: 14px;">Image Placeholder</p>
+                      </div>`
+                    }
+                    <p style="margin: 10px 0;">${templateData.service2}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Call to Action Section -->
+          <tr>
+            <td align="center" style="padding: 20px;">
+              <h2 style="font-size: 24px; font-weight: bold; margin: 5px 0;">${templateData.closingCta1}</h2>
+              <h1 style="font-size: 28px; font-weight: bold; margin: 5px 0;">
+                <span>CGI</span> <span style="color: #3182ce;">AD</span>
+              </h1>
+              
+              <div>
+                <!--[if mso]>
+                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${templateData.contactButtonLink || '#'}" style="height:40px;v-text-anchor:middle;width:150px;" arcsize="50%" stroke="f" fillcolor="#3182ce">
+                  <w:anchorlock/>
+                  <center>
+                <![endif]-->
+                <a href="${templateData.contactButtonLink || '#'}" style="background-color: #3182ce; border-radius: 30px; color: white; display: inline-block; font-family: sans-serif; font-size: 16px; font-weight: bold; line-height: 40px; text-align: center; text-decoration: none; width: 150px; -webkit-text-size-adjust: none;">${templateData.contactButton}</a>
+                <!--[if mso]>
+                  </center>
+                </v:roundrect>
+                <![endif]-->
+              </div>
+              
+              <p style="margin-top: 20px;">
+                ${templateData.contactText}
+                <br />
+                <a href="mailto:${templateData.emailAddress}" style="color: #3182ce; text-decoration: none;">
+                  ${templateData.emailAddress}
+                </a>
+              </p>
+              
+              <!-- Social Icons -->
+              <table role="presentation" cellpadding="0" cellspacing="0" style="width: 200px; margin: 20px auto;">
+                <tr>
+                  <!-- X/Twitter -->
+                  <td align="center" style="padding: 0 5px;">
+                    <a href="${templateData.twitterLink || '#'}" target="_blank" style="text-decoration: none;">
+                      ${templateData.twitterIcon ? 
+                        `<img src="${templateData.twitterIcon}" alt="Twitter" style="width: 24px; height: 24px; border: 0;" />` : 
+                        `<div style="width: 24px; height: 24px; background-color: #e2e8f0; border-radius: 50%; margin: 0 auto;"></div>`
+                      }
+                    </a>
+                  </td>
+                  
+                  <!-- LinkedIn -->
+                  <td align="center" style="padding: 0 5px;">
+                    <a href="${templateData.linkedinLink || '#'}" target="_blank" style="text-decoration: none;">
+                      ${templateData.linkedinIcon ? 
+                        `<img src="${templateData.linkedinIcon}" alt="LinkedIn" style="width: 24px; height: 24px; border: 0;" />` : 
+                        `<div style="width: 24px; height: 24px; background-color: #e2e8f0; border-radius: 50%; margin: 0 auto;"></div>`
+                      }
+                    </a>
+                  </td>
+                  
+                  <!-- Facebook -->
+                  <td align="center" style="padding: 0 5px;">
+                    <a href="${templateData.facebookLink || '#'}" target="_blank" style="text-decoration: none;">
+                      ${templateData.facebookIcon ? 
+                        `<img src="${templateData.facebookIcon}" alt="Facebook" style="width: 24px; height: 24px; border: 0;" />` : 
+                        `<div style="width: 24px; height: 24px; background-color: #e2e8f0; border-radius: 50%; margin: 0 auto;"></div>`
+                      }
+                    </a>
+                  </td>
+                  
+                  <!-- Instagram -->
+                  <td align="center" style="padding: 0 5px;">
+                    <a href="${templateData.instagramLink || '#'}" target="_blank" style="text-decoration: none;">
+                      ${templateData.instagramIcon ? 
+                        `<img src="${templateData.instagramIcon}" alt="Instagram" style="width: 24px; height: 24px; border: 0;" />` : 
+                        `<div style="width: 24px; height: 24px; background-color: #e2e8f0; border-radius: 50%; margin: 0 auto;"></div>`
+                      }
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>`;
 };
@@ -313,6 +295,7 @@ const EmailTemplateEditor = () => {
     headline2: "DESERVES MORE",
     subheadline: "THAN JUST ANOTHER AD",
     ctaButton: "PORTFOLIO",
+    ctaButtonLink: "https://example.com/portfolio", // New field
     whatWeDo: "WHAT WE DO?",
     description: "Heybuddy specializes in cutting-edge digital solutions, offering services such as game development, CGI and 3D billboard ads.",
     benefit1: "INCREASE BRAND RECALL",
@@ -327,18 +310,42 @@ const EmailTemplateEditor = () => {
     closingCta1: "LET'S MAKE YOUR FIRST",
     closingCta2: "CGI AD",
     contactButton: "CONTACT NOW",
+    contactButtonLink: "https://example.com/contact", // New field
     contactText: "OR VISIT",
     emailAddress: "info@heybuddy.co.in",
-    // Added image fields
+    // Social media links
+    twitterLink: "https://twitter.com/heybuddy",
+    linkedinLink: "https://linkedin.com/company/heybuddy",
+    facebookLink: "https://facebook.com/heybuddy",
+    instagramLink: "https://instagram.com/heybuddy",
+    // Image fields
     headerImage: "",
     service1Image: "",
-    service2Image: ""
+    service2Image: "",
+    // Benefit icon fields
+    benefit1Icon: "",
+    benefit2Icon: "",
+    benefit3Icon: "",
+    benefit4Icon: "",
+    // Social icon fields
+    twitterIcon: "",
+    linkedinIcon: "",
+    facebookIcon: "",
+    instagramIcon: ""
   });
   
   const [loading, setLoading] = useState({
     headerImage: false,
     service1Image: false,
-    service2Image: false
+    service2Image: false,
+    benefit1Icon: false,
+    benefit2Icon: false,
+    benefit3Icon: false,
+    benefit4Icon: false,
+    twitterIcon: false,
+    linkedinIcon: false,
+    facebookIcon: false,
+    instagramIcon: false
   });
 
   const handleChange = (field, value) => {
@@ -421,6 +428,16 @@ const EmailTemplateEditor = () => {
               />
             </div>
             <div className="mb-2">
+              <label className="block text-sm mb-1">CTA Button Link</label>
+              <input 
+                type="text" 
+                className="w-full p-2 border rounded" 
+                value={template.ctaButtonLink}
+                onChange={(e) => handleChange('ctaButtonLink', e.target.value)}
+                placeholder="https://example.com"
+              />
+            </div>
+            <div className="mb-2">
               <label className="block text-sm mb-1">Header Image</label>
               <input 
                 type="file" 
@@ -482,6 +499,33 @@ const EmailTemplateEditor = () => {
               />
             </div>
             <div className="mb-2">
+              <label className="block text-sm mb-1">Benefit 1 Icon</label>
+              <input 
+                type="file" 
+                accept="image/*"
+                className="w-full p-2 border rounded" 
+                onChange={(e) => handleImageUpload(e, 'benefit1Icon')}
+                disabled={loading.benefit1Icon}
+              />
+              {loading.benefit1Icon && <p className="text-sm text-blue-500 mt-1">Uploading...</p>}
+              {template.benefit1Icon && (
+                <div className="mt-1 relative">
+                  <img 
+                    src={template.benefit1Icon} 
+                    alt="Benefit 1 icon preview" 
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                  <button 
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                    onClick={() => handleChange('benefit1Icon', '')}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            <div className="mb-2">
               <label className="block text-sm mb-1">Benefit 2</label>
               <input 
                 type="text" 
@@ -490,6 +534,33 @@ const EmailTemplateEditor = () => {
                 onChange={(e) => handleChange('benefit2', e.target.value)}
               />
             </div>
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Benefit 2 Icon</label>
+              <input 
+                type="file" 
+                accept="image/*"
+                className="w-full p-2 border rounded" 
+                onChange={(e) => handleImageUpload(e, 'benefit2Icon')}
+                disabled={loading.benefit2Icon}
+              />
+              {loading.benefit2Icon && <p className="text-sm text-blue-500 mt-1">Uploading...</p>}
+              {template.benefit2Icon && (
+                <div className="mt-1 relative">
+                  <img 
+                    src={template.benefit2Icon} 
+                    alt="Benefit 2 icon preview" 
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                  <button 
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                    onClick={() => handleChange('benefit2Icon', '')}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+            
             <div className="mb-2">
               <label className="block text-sm mb-1">Benefit 3</label>
               <input 
@@ -500,6 +571,33 @@ const EmailTemplateEditor = () => {
               />
             </div>
             <div className="mb-2">
+              <label className="block text-sm mb-1">Benefit 3 Icon</label>
+              <input 
+                type="file" 
+                accept="image/*"
+                className="w-full p-2 border rounded" 
+                onChange={(e) => handleImageUpload(e, 'benefit3Icon')}
+                disabled={loading.benefit3Icon}
+              />
+              {loading.benefit3Icon && <p className="text-sm text-blue-500 mt-1">Uploading...</p>}
+              {template.benefit3Icon && (
+                <div className="mt-1 relative">
+                  <img 
+                    src={template.benefit3Icon} 
+                    alt="Benefit 3 icon preview" 
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                  <button 
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                    onClick={() => handleChange('benefit3Icon', '')}
+                  >
+                    ×
+                  </button>
+               </div>
+              )}
+            </div>
+            
+            <div className="mb-2">
               <label className="block text-sm mb-1">Benefit 4</label>
               <input 
                 type="text" 
@@ -507,6 +605,32 @@ const EmailTemplateEditor = () => {
                 value={template.benefit4}
                 onChange={(e) => handleChange('benefit4', e.target.value)}
               />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Benefit 4 Icon</label>
+              <input 
+                type="file" 
+                accept="image/*"
+                className="w-full p-2 border rounded" 
+                onChange={(e) => handleImageUpload(e, 'benefit4Icon')}
+                disabled={loading.benefit4Icon}
+              />
+              {loading.benefit4Icon && <p className="text-sm text-blue-500 mt-1">Uploading...</p>}
+              {template.benefit4Icon && (
+                <div className="mt-1 relative">
+                  <img 
+                    src={template.benefit4Icon} 
+                    alt="Benefit 4 icon preview" 
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                  <button 
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                    onClick={() => handleChange('benefit4Icon', '')}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           
@@ -645,6 +769,16 @@ const EmailTemplateEditor = () => {
               />
             </div>
             <div className="mb-2">
+              <label className="block text-sm mb-1">Contact Button Link</label>
+              <input 
+                type="text" 
+                className="w-full p-2 border rounded" 
+                value={template.contactButtonLink}
+                onChange={(e) => handleChange('contactButtonLink', e.target.value)}
+                placeholder="https://example.com/contact"
+              />
+            </div>
+            <div className="mb-2">
               <label className="block text-sm mb-1">Contact Text</label>
               <input 
                 type="text" 
@@ -661,6 +795,158 @@ const EmailTemplateEditor = () => {
                 value={template.emailAddress}
                 onChange={(e) => handleChange('emailAddress', e.target.value)}
               />
+            </div>
+          </div>
+          
+          <div>
+            <h3 className="font-bold">Social Media</h3>
+            
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Twitter/X Link</label>
+              <input 
+                type="text" 
+                className="w-full p-2 border rounded" 
+                value={template.twitterLink}
+                onChange={(e) => handleChange('twitterLink', e.target.value)}
+                placeholder="https://twitter.com/yourbrand"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Twitter/X Icon</label>
+              <input 
+                type="file" 
+                accept="image/*"
+                className="w-full p-2 border rounded" 
+                onChange={(e) => handleImageUpload(e, 'twitterIcon')}
+                disabled={loading.twitterIcon}
+              />
+              {loading.twitterIcon && <p className="text-sm text-blue-500 mt-1">Uploading...</p>}
+              {template.twitterIcon && (
+                <div className="mt-1 relative">
+                  <img 
+                    src={template.twitterIcon} 
+                    alt="Twitter icon preview" 
+                    className="w-8 h-8 object-cover rounded"
+                  />
+                  <button 
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs"
+                    onClick={() => handleChange('twitterIcon', '')}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            <div className="mb-2">
+              <label className="block text-sm mb-1">LinkedIn Link</label>
+              <input 
+                type="text" 
+                className="w-full p-2 border rounded" 
+                value={template.linkedinLink}
+                onChange={(e) => handleChange('linkedinLink', e.target.value)}
+                placeholder="https://linkedin.com/company/yourbrand"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm mb-1">LinkedIn Icon</label>
+              <input 
+                type="file" 
+                accept="image/*"
+                className="w-full p-2 border rounded" 
+                onChange={(e) => handleImageUpload(e, 'linkedinIcon')}
+                disabled={loading.linkedinIcon}
+              />
+              {loading.linkedinIcon && <p className="text-sm text-blue-500 mt-1">Uploading...</p>}
+              {template.linkedinIcon && (
+                <div className="mt-1 relative">
+                  <img 
+                    src={template.linkedinIcon} 
+                    alt="LinkedIn icon preview" 
+                    className="w-8 h-8 object-cover rounded"
+                  />
+                  <button 
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs"
+                    onClick={() => handleChange('linkedinIcon', '')}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Facebook Link</label>
+              <input 
+                type="text" 
+                className="w-full p-2 border rounded" 
+                value={template.facebookLink}
+                onChange={(e) => handleChange('facebookLink', e.target.value)}
+                placeholder="https://facebook.com/yourbrand"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Facebook Icon</label>
+              <input 
+                type="file" 
+                accept="image/*"
+                className="w-full p-2 border rounded" 
+                onChange={(e) => handleImageUpload(e, 'facebookIcon')}
+                disabled={loading.facebookIcon}
+              />
+              {loading.facebookIcon && <p className="text-sm text-blue-500 mt-1">Uploading...</p>}
+              {template.facebookIcon && (
+                <div className="mt-1 relative">
+                  <img 
+                    src={template.facebookIcon} 
+                    alt="Facebook icon preview" 
+                    className="w-8 h-8 object-cover rounded"
+                  />
+                  <button 
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs"
+                    onClick={() => handleChange('facebookIcon', '')}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Instagram Link</label>
+              <input 
+                type="text" 
+                className="w-full p-2 border rounded" 
+                value={template.instagramLink}
+                onChange={(e) => handleChange('instagramLink', e.target.value)}
+                placeholder="https://instagram.com/yourbrand"
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Instagram Icon</label>
+              <input 
+                type="file" 
+                accept="image/*"
+                className="w-full p-2 border rounded" 
+                onChange={(e) => handleImageUpload(e, 'instagramIcon')}
+                disabled={loading.instagramIcon}
+              />
+              {loading.instagramIcon && <p className="text-sm text-blue-500 mt-1">Uploading...</p>}
+              {template.instagramIcon && (
+                <div className="mt-1 relative">
+                  <img 
+                    src={template.instagramIcon} 
+                    alt="Instagram icon preview" 
+                    className="w-8 h-8 object-cover rounded"
+                  />
+                  <button 
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs"
+                    onClick={() => handleChange('instagramIcon', '')}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           
@@ -685,9 +971,14 @@ const EmailTemplateEditor = () => {
               <h1 className="text-4xl font-bold my-2">{template.headline2}</h1>
               <p className="text-lg mt-2">{template.subheadline}</p>
               
-              <button className="bg-blue-500 text-white rounded-full px-6 py-2 mt-4">
+              <a 
+                href={template.ctaButtonLink || "#"} 
+                className="bg-blue-500 text-white rounded-full px-6 py-2 mt-4 inline-block"
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
                 {template.ctaButton}
-              </button>
+              </a>
             </div>
             
             <div className="my-8">
@@ -712,33 +1003,65 @@ const EmailTemplateEditor = () => {
             <div className="grid grid-cols-4 gap-4 my-8">
               <div className="text-center">
                 <div className="flex justify-center mb-2">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-500">icon</span>
-                  </div>
+                  {template.benefit1Icon ? (
+                    <img 
+                      src={template.benefit1Icon} 
+                      alt="Benefit 1" 
+                      className="w-12 h-12 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-blue-500">icon</span>
+                    </div>
+                  )}
                 </div>
                 <p className="text-xs font-bold">{template.benefit1}</p>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-2">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-500">icon</span>
-                  </div>
+                  {template.benefit2Icon ? (
+                    <img 
+                      src={template.benefit2Icon} 
+                      alt="Benefit 2" 
+                      className="w-12 h-12 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-blue-500">icon</span>
+                    </div>
+                  )}
                 </div>
                 <p className="text-xs font-bold">{template.benefit2}</p>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-2">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-500">icon</span>
-                  </div>
+                  {template.benefit3Icon ? (
+                    <img 
+                      src={template.benefit3Icon} 
+                      alt="Benefit 3" 
+                      className="w-12 h-12 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-blue-500">icon</span>
+                    </div>
+                  )}
                 </div>
                 <p className="text-xs font-bold">{template.benefit3}</p>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-2">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-500">icon</span>
-                  </div>
+                  {template.benefit4Icon ? (
+                    <img 
+                      src={template.benefit4Icon} 
+                      alt="Benefit 4" 
+                      className="w-12 h-12 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-blue-500">icon</span>
+                    </div>
+                  )}
                 </div>
                 <p className="text-xs font-bold">{template.benefit4}</p>
               </div>
@@ -787,9 +1110,14 @@ const EmailTemplateEditor = () => {
                 <span className="text-black">CGI</span> <span className="text-blue-500">AD</span>
               </h2>
               
-              <button className="bg-blue-500 text-white rounded-full px-6 py-2 mt-4">
+              <a 
+                href={template.contactButtonLink || "#"} 
+                className="bg-blue-500 text-white rounded-full px-6 py-2 mt-4 inline-block"
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
                 {template.contactButton}
-              </button>
+              </a>
               
               <p className="mt-4">
                 {template.contactText}
@@ -800,10 +1128,70 @@ const EmailTemplateEditor = () => {
               </p>
               
               <div className="flex justify-center space-x-4 mt-4">
-                <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                <a 
+                  href={template.twitterLink || "#"} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block"
+                >
+                  {template.twitterIcon ? (
+                    <img 
+                      src={template.twitterIcon} 
+                      alt="Twitter" 
+                      className="w-6 h-6 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                  )}
+                </a>
+                <a 
+                  href={template.linkedinLink || "#"} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block"
+                >
+                  {template.linkedinIcon ? (
+                    <img 
+                      src={template.linkedinIcon} 
+                      alt="LinkedIn" 
+                      className="w-6 h-6 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                  )}
+                </a>
+                <a 
+                  href={template.facebookLink || "#"} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block"
+                >
+                  {template.facebookIcon ? (
+                    <img 
+                      src={template.facebookIcon} 
+                      alt="Facebook" 
+                      className="w-6 h-6 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                  )}
+                </a>
+                <a 
+                  href={template.instagramLink || "#"} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block"
+                >
+                  {template.instagramIcon ? (
+                    <img 
+                      src={template.instagramIcon} 
+                      alt="Instagram" 
+                      className="w-6 h-6 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                  )}
+                </a>
               </div>
             </div>
           </div>
