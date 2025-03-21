@@ -33,6 +33,32 @@ const uploadFileToBlobStorage = async (file) => {
   }
 };
 
+// API for saving templates
+const saveTemplateToAPI = async (templateName, htmlContent) => {
+  try {
+    const response = await fetch('https://emails-backend-ghaeffhnfmcbfscv.eastus-01.azurewebsites.net//api/email-templates', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: templateName,
+        content: htmlContent
+      }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error saving template:', error);
+    throw error;
+  }
+};
+
 // HTML Template Generator - Updated for email compatibility
 const generateEmailHtml = (templateData) => {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -56,7 +82,7 @@ const generateEmailHtml = (templateData) => {
           <tr>
             <td align="center" style="padding: 20px;">
               <h1 style="font-size: 28px; font-weight: bold; margin: 5px 0;">
-                <span>${templateData.headline1}</span> <span style="color: #3182ce;">BRAND</span>
+                <span>${templateData.headline1}</span> <span style="color: #3182ce;">${templateData.brandText}</span>
               </h1>
               <h1 style="font-size: 28px; font-weight: bold; margin: 5px 0;">${templateData.headline2}</h1>
               <p style="font-size: 16px; margin: 10px 0;">${templateData.subheadline}</p>
@@ -194,7 +220,7 @@ const generateEmailHtml = (templateData) => {
             <td align="center" style="padding: 20px;">
               <h2 style="font-size: 24px; font-weight: bold; margin: 5px 0;">${templateData.closingCta1}</h2>
               <h1 style="font-size: 28px; font-weight: bold; margin: 5px 0;">
-                <span>CGI</span> <span style="color: #3182ce;">AD</span>
+                <span>${templateData.closingCta2Text}</span> <span style="color: #3182ce;">${templateData.closingCtaHighlight}</span>
               </h1>
               
               <div>
@@ -272,61 +298,66 @@ const generateEmailHtml = (templateData) => {
 </html>`;
 };
 
-const downloadHtmlTemplate = (templateData, filename = "email-template.html") => {
-  const html = generateEmailHtml(templateData);
-  const blob = new Blob([html], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  
-  link.download = filename;
-  link.href = url;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-  
-  return html;
-};
-
 // Main EmailTemplateEditor component
 const EmailTemplateEditor = () => {
+  const [templateName, setTemplateName] = useState('New Email Template');
+  const [saveStatus, setSaveStatus] = useState('');
   const [template, setTemplate] = useState({
+    // Header section
     headline1: "YOUR BRAND",
+    brandText: "BRAND", // New field to make blue "BRAND" editable
     headline2: "DESERVES MORE",
     subheadline: "THAN JUST ANOTHER AD",
     ctaButton: "PORTFOLIO",
-    ctaButtonLink: "https://example.com/portfolio", // New field
+    ctaButtonLink: "https://example.com/portfolio",
+    
+    // Services section
     whatWeDo: "WHAT WE DO?",
     description: "Heybuddy specializes in cutting-edge digital solutions, offering services such as game development, CGI and 3D billboard ads.",
+    
+    // Benefits section
     benefit1: "INCREASE BRAND RECALL",
     benefit2: "INCREASE IN SALES",
     benefit3: "INCREASE IN REACH",
     benefit4: "INCREASE ENGAGEMENT",
+    
+    // Impact section
     impactHeadline1: "WE CREATE HIGH-IMPACT 3D CGI ADS",
     impactHeadline2: "THAT MAKE YOUR BRAND",
     impactHighlight: "UNFORGETTABLE.",
+    
+    // Services details
     service1: "3D MODELING",
     service2: "3D ANIMATION",
+    
+    // Closing CTA
     closingCta1: "LET'S MAKE YOUR FIRST",
-    closingCta2: "CGI AD",
+    closingCta2Text: "CGI", // Changed from closingCta2 to make both parts editable
+    closingCtaHighlight: "AD", // New field for the highlighted part
+    
+    // Contact info
     contactButton: "CONTACT NOW",
-    contactButtonLink: "https://example.com/contact", // New field
+    contactButtonLink: "https://example.com/contact",
     contactText: "OR VISIT",
     emailAddress: "info@heybuddy.co.in",
+    
     // Social media links
     twitterLink: "https://twitter.com/heybuddy",
     linkedinLink: "https://linkedin.com/company/heybuddy",
     facebookLink: "https://facebook.com/heybuddy",
     instagramLink: "https://instagram.com/heybuddy",
+    
     // Image fields
     headerImage: "",
     service1Image: "",
     service2Image: "",
+    
     // Benefit icon fields
     benefit1Icon: "",
     benefit2Icon: "",
     benefit3Icon: "",
     benefit4Icon: "",
+    
     // Social icon fields
     twitterIcon: "",
     linkedinIcon: "",
@@ -345,7 +376,8 @@ const EmailTemplateEditor = () => {
     twitterIcon: false,
     linkedinIcon: false,
     facebookIcon: false,
-    instagramIcon: false
+    instagramIcon: false,
+    savingTemplate: false
   });
 
   const handleChange = (field, value) => {
@@ -378,8 +410,44 @@ const EmailTemplateEditor = () => {
     }
   };
   
-  const handleExport = () => {
-    downloadHtmlTemplate(template);
+  const handleSaveTemplate = async () => {
+    if (!templateName.trim()) {
+      alert("Please enter a template name");
+      return;
+    }
+    
+    setLoading(prev => ({ ...prev, savingTemplate: true }));
+    setSaveStatus('Saving...');
+    
+    try {
+      const htmlContent = generateEmailHtml(template);
+      await saveTemplateToAPI(templateName, htmlContent);
+      setSaveStatus('Template saved successfully!');
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSaveStatus('');
+      }, 3000);
+    } catch (error) {
+      console.error("Error saving template:", error);
+      setSaveStatus('Failed to save template. Please try again.');
+    } finally {
+      setLoading(prev => ({ ...prev, savingTemplate: false }));
+    }
+  };
+  
+  const downloadHtmlTemplate = (filename = "email-template.html") => {
+    const html = generateEmailHtml(template);
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    link.download = filename;
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
   
   return (
@@ -388,9 +456,44 @@ const EmailTemplateEditor = () => {
       <div className="w-full md:w-1/3 p-4 bg-gray-100 overflow-y-auto h-screen">
         <h2 className="text-xl font-bold mb-4">Email Template Editor</h2>
         
+        {/* Template Name Section */}
+        <div className="mb-4 bg-white p-3 rounded shadow">
+          <label className="block text-sm font-medium mb-2">Template Name</label>
+          <input 
+            type="text" 
+            className="w-full p-2 border rounded" 
+            value={templateName}
+            onChange={(e) => setTemplateName(e.target.value)}
+            placeholder="Enter template name"
+          />
+          
+          <div className="flex mt-3">
+            <button 
+              className="flex-1 p-2 bg-blue-500 text-white rounded font-medium mr-2 flex items-center justify-center"
+              onClick={handleSaveTemplate}
+              disabled={loading.savingTemplate}
+            >
+              {loading.savingTemplate ? 'Saving...' : 'Save Template'}
+            </button>
+            
+            <button 
+              className="flex-1 p-2 bg-gray-700 text-white rounded font-medium flex items-center justify-center"
+              onClick={() => downloadHtmlTemplate(`${templateName.replace(/\s+/g, '-').toLowerCase()}.html`)}
+            >
+              Download HTML
+            </button>
+          </div>
+          
+          {saveStatus && (
+            <p className={`mt-2 text-sm ${saveStatus.includes('success') ? 'text-green-600' : saveStatus.includes('Failed') ? 'text-red-600' : 'text-blue-600'}`}>
+              {saveStatus}
+            </p>
+          )}
+        </div>
+        
         <div className="space-y-4">
-          <div>
-            <h3 className="font-bold">Header Section</h3>
+          <div className="bg-white p-3 rounded shadow">
+            <h3 className="font-bold border-b pb-2 mb-3">Header Section</h3>
             <div className="mb-2">
               <label className="block text-sm mb-1">Headline 1</label>
               <input 
@@ -398,6 +501,15 @@ const EmailTemplateEditor = () => {
                 className="w-full p-2 border rounded" 
                 value={template.headline1}
                 onChange={(e) => handleChange('headline1', e.target.value)}
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Brand Text (Blue)</label>
+              <input 
+                type="text" 
+                className="w-full p-2 border rounded text-blue-600 font-semibold" 
+                value={template.brandText}
+                onChange={(e) => handleChange('brandText', e.target.value)}
               />
             </div>
             <div className="mb-2">
@@ -465,8 +577,8 @@ const EmailTemplateEditor = () => {
             </div>
           </div>
           
-          <div>
-            <h3 className="font-bold">Services Section</h3>
+          <div className="bg-white p-3 rounded shadow">
+            <h3 className="font-bold border-b pb-2 mb-3">Services Section</h3>
             <div className="mb-2">
               <label className="block text-sm mb-1">What We Do Heading</label>
               <input 
@@ -487,8 +599,8 @@ const EmailTemplateEditor = () => {
             </div>
           </div>
           
-          <div>
-            <h3 className="font-bold">Benefits</h3>
+          <div className="bg-white p-3 rounded shadow">
+            <h3 className="font-bold border-b pb-2 mb-3">Benefits</h3>
             <div className="mb-2">
               <label className="block text-sm mb-1">Benefit 1</label>
               <input 
@@ -593,7 +705,7 @@ const EmailTemplateEditor = () => {
                   >
                     ×
                   </button>
-               </div>
+                </div>
               )}
             </div>
             
@@ -634,8 +746,8 @@ const EmailTemplateEditor = () => {
             </div>
           </div>
           
-          <div>
-            <h3 className="font-bold">Impact Section</h3>
+          <div className="bg-white p-3 rounded shadow">
+            <h3 className="font-bold border-b pb-2 mb-3">Impact Section</h3>
             <div className="mb-2">
               <label className="block text-sm mb-1">Impact Line 1</label>
               <input 
@@ -665,8 +777,8 @@ const EmailTemplateEditor = () => {
             </div>
           </div>
           
-          <div>
-            <h3 className="font-bold">Services</h3>
+          <div className="bg-white p-3 rounded shadow">
+            <h3 className="font-bold border-b pb-2 mb-3">Services</h3>
             <div className="mb-2">
               <label className="block text-sm mb-1">Service 1</label>
               <input 
@@ -739,8 +851,8 @@ const EmailTemplateEditor = () => {
             </div>
           </div>
           
-          <div>
-            <h3 className="font-bold">Call to Action</h3>
+          <div className="bg-white p-3 rounded shadow">
+            <h3 className="font-bold border-b pb-2 mb-3">Call to Action</h3>
             <div className="mb-2">
               <label className="block text-sm mb-1">CTA Line 1</label>
               <input 
@@ -751,12 +863,21 @@ const EmailTemplateEditor = () => {
               />
             </div>
             <div className="mb-2">
-              <label className="block text-sm mb-1">CTA Line 2</label>
+              <label className="block text-sm mb-1">CTA Line 2 (First Part)</label>
               <input 
                 type="text" 
                 className="w-full p-2 border rounded" 
-                value={template.closingCta2}
-                onChange={(e) => handleChange('closingCta2', e.target.value)}
+                value={template.closingCta2Text}
+                onChange={(e) => handleChange('closingCta2Text', e.target.value)}
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm mb-1">CTA Line 2 (Highlighted Part)</label>
+              <input 
+                type="text" 
+                className="w-full p-2 border rounded text-blue-600 font-semibold" 
+                value={template.closingCtaHighlight}
+                onChange={(e) => handleChange('closingCtaHighlight', e.target.value)}
               />
             </div>
             <div className="mb-2">
@@ -798,8 +919,8 @@ const EmailTemplateEditor = () => {
             </div>
           </div>
           
-          <div>
-            <h3 className="font-bold">Social Media</h3>
+          <div className="bg-white p-3 rounded shadow">
+            <h3 className="font-bold border-b pb-2 mb-3">Social Media</h3>
             
             <div className="mb-2">
               <label className="block text-sm mb-1">Twitter/X Link</label>
@@ -949,13 +1070,6 @@ const EmailTemplateEditor = () => {
               )}
             </div>
           </div>
-          
-          <button 
-            className="w-full p-3 bg-blue-500 text-white rounded font-bold"
-            onClick={handleExport}
-          >
-            Export Template
-          </button>
         </div>
       </div>
       
@@ -966,7 +1080,7 @@ const EmailTemplateEditor = () => {
           <div className="bg-white p-4">
             <div className="text-center">
               <h1 className="text-4xl font-bold">
-                <span className="text-black">{template.headline1}</span> <span className="text-blue-500">BRAND</span>
+                <span className="text-black">{template.headline1}</span> <span className="text-blue-500">{template.brandText}</span>
               </h1>
               <h1 className="text-4xl font-bold my-2">{template.headline2}</h1>
               <p className="text-lg mt-2">{template.subheadline}</p>
@@ -1107,7 +1221,7 @@ const EmailTemplateEditor = () => {
             <div className="text-center my-8">
               <h2 className="text-2xl font-bold">{template.closingCta1}</h2>
               <h2 className="text-4xl font-bold">
-                <span className="text-black">CGI</span> <span className="text-blue-500">AD</span>
+                <span className="text-black">{template.closingCta2Text}</span> <span className="text-blue-500">{template.closingCtaHighlight}</span>
               </h2>
               
               <a 
